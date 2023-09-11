@@ -31,10 +31,6 @@ public class Diet {
     private Integer maxFats;
     private Integer maxCarbs;
     private Integer maxProteins;
-    private Boolean women;
-    private Integer age;
-    private Integer height;
-    private Integer weight;
     private static Map<Food, Integer> dietFoodAndWeights;
 
 
@@ -53,16 +49,6 @@ public class Diet {
         this.maxCarbs = maxCarbs;
         this.maxFats = maxFats;
         this.maxProteins = maxProteins;
-        dietFoodAndWeights = new HashMap<>();
-    }
-
-    public Diet(Integer maxCalories, Boolean women, Integer age, Integer height, Integer weight){
-
-        this.maxCalories = maxCalories;
-        this.women = women;
-        this.age = age;
-        this. height = height;
-        this.weight = weight;
         dietFoodAndWeights = new HashMap<>();
     }
 
@@ -97,38 +83,6 @@ public class Diet {
 
     public void setMaxProteins(Integer maxProteins) {
         this.maxProteins = maxProteins;
-    }
-
-    public Boolean getWomen() {
-        return women;
-    }
-
-    public void setWomen(Boolean women) {
-        this.women = women;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
     }
 
     //Otros métodos
@@ -184,7 +138,7 @@ public class Diet {
             int weight = entry.getValue();
 
             // Calcular las calorías del alimento y sumarlas al total
-            int calories = food.getCalories(100);
+            Integer calories = food.getCalories(100);
             totalCalories += (calories * weight) / 100; // Ajustar por el peso en gramos
         }
 

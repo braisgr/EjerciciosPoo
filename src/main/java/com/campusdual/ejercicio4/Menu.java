@@ -43,7 +43,11 @@ public class Menu {
                     break;
 
                 case 2:
-                    Diet.showActualDietDetails();
+                    if (diet == null){
+                        System.out.println("Debes crear una dieta en primer lugar");
+                    }else{
+                        Diet.showActualDietDetails();
+                    }
                     break;
 
                 case 3:
@@ -131,7 +135,7 @@ public class Menu {
 
                     Integer maxKcal = Diet.metabolismCalc(woman, age, height, weight);
 
-                    diet = new Diet(maxKcal, woman, age, height, weight);
+                    diet = new Diet(maxKcal);
                     System.out.println("\nDieta creada con un límite de " +maxKcal+ " kcal");
                     Diet.resetDietFoodAndWeights();
                     break;
@@ -190,9 +194,13 @@ public class Menu {
 
                 case 2:
 
-                    if (diet == null){
+                    if (diet == null) {
                         System.out.println("Primero debes de dar de alta una nueva dieta\n");
-                    }else{
+                    }
+                    else if (foods.isEmpty()){
+                        System.out.println("Primero debes de dar de alta un nuevo alimento\n");
+                        }
+                    else{
                         System.out.println("**LISTA DE ALIMENTOS**");
 
                         for(int i=0; i<foods.size(); i++){
