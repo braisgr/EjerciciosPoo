@@ -153,7 +153,7 @@ public class Diet {
             Food food = entry.getKey();
             int weight = entry.getValue();
 
-            int carbs = food.getCarbos();
+            int carbs = (food.getCarbos()*weight)/100;
             totalCarbs += carbs;
         }
         return totalCarbs;
@@ -167,7 +167,7 @@ public class Diet {
             Food food = entry.getKey();
             int weight = entry.getValue();
 
-            int fats = food.getFats();
+            int fats = (food.getFats()*weight)/100;
             totalFats += fats;
         }
         return totalFats;
@@ -181,7 +181,7 @@ public class Diet {
             Food food = entry.getKey();
             int weight = entry.getValue();
 
-            int proteins = food.getProteins();
+            int proteins = (food.getProteins()*weight)/100;
             totalProteins += proteins;
         }
         return totalProteins;
