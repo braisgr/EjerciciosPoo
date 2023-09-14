@@ -117,22 +117,36 @@ public class DietProgram {
         }else{
 
         }
-    }
+    }//showCustomerDetails()
 
     private void assignDietToCustomer() {
-    }
+        //*Comprobamos que las listas de dietas y customers no estén vacías
+        if(customerList.isEmpty() || dietList.isEmpty()){
+            System.out.println("Debes dar de alta algún paciente o dieta en primer lugar");
+            return;
+        }
+        Integer position = selectCustomer();
+        System.out.println("¿Para qué día de la semana deseas asignar la dieta?");
+        //todo obtener el día que nos indique el cliente
+        System.out.println("¿Qué dieta deseas añadir?");
+        String selectedDiet = selectDiet();
+
+        //customerList.get(position).setCostumerDietsList(Day, selectedDiet);
+
+
+    }//assignDietToCustomer()
 
     private void deleteCustomer() {
         if(customerList.isEmpty()){
             System.out.println("La lista de pacientes está vacía. No se puede eliminar ningún elemento");
             return;
         }else{
-            Integer customerIndex = customerSelectList();
-            customerList.remove(customerIndex);
+            Integer position = selectCustomer();
+            customerList.remove(position);
         }
-    }
+    }//deleteCustomer()
 
-    private Integer customerSelectList() {
+    private Integer selectCustomer() {
         System.out.println("Selecciona un paciente de la lista:");
 
         int i=1;
@@ -143,7 +157,7 @@ public class DietProgram {
         Integer selectedCustomerIndex = Kb.forceNextInt();
 
         return selectedCustomerIndex-1;
-    }
+    }//customerSelectList()
 
     private void dietManager() {
         System.out.println("########################################################");
