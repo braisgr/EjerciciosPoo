@@ -1,5 +1,6 @@
 package com.campusdual.ejercicio5;
 
+import com.campusdual.ejercicio5.enums.Days;
 import com.campusdual.ejercicio5.exceptions.MaxCaloriesReachedException;
 import com.campusdual.ejercicio5.exceptions.MaxCarbsReachedException;
 import com.campusdual.ejercicio5.exceptions.MaxFatsReachedException;
@@ -63,6 +64,7 @@ public class DietProgram {
             System.out.println("2- Mostrar detalles de un Paciente");
             System.out.println("3- Asignar dieta a un Paciente");
             System.out.println("4- Dar de baja un Paciente");
+            System.out.println("5- Volver");
             option = Kb.getOption(1, 5);
 
             switch (option){
@@ -115,9 +117,25 @@ public class DietProgram {
         if(customerList.isEmpty()){
             System.out.println("La lista de pacientes está vacía. No se puede mostrar ningún elemento");
         }else{
+            System.out.println("###########################");
+            System.out.println("Información del paciente");
+            System.out.println("###########################");
+            Integer position = selectCustomer();
 
+            System.out.println(customerList.get(position).toString());
+            Diet diet = null;
+            for(Days day : Days.values()){
+                diet = customerList.get(position).getDietForDay(day);
+
+                if(diet != null){
+                    System.out.println(day.getName() + ": " +diet.getName());
+                }else{
+                    System.out.println(day.getName() + ": Dieta no asignada para este día.");
+                }
+            }
         }
     }//showCustomerDetails()
+
 
     private void assignDietToCustomer() {
         //*Comprobamos que las listas de dietas y customers no estén vacías
@@ -127,13 +145,11 @@ public class DietProgram {
         }
         Integer position = selectCustomer();
         System.out.println("¿Para qué día de la semana deseas asignar la dieta?");
-        //todo obtener el día que nos indique el cliente
+        Days day = Days.selectDay(Kb.nextLine());
         System.out.println("¿Qué dieta deseas añadir?");
         String selectedDiet = selectDiet();
 
-        //customerList.get(position).setCostumerDietsList(Day, selectedDiet);
-
-
+        customerList.get(position).setCostumerDietsList(day, dietList.get(selectedDiet));
     }//assignDietToCustomer()
 
     private void deleteCustomer() {
@@ -171,12 +187,12 @@ public class DietProgram {
             System.out.println("2- Mostrar detalles de la dieta");
             System.out.println("3- Modificar dieta");
             System.out.println("4- Eliminar dieta");
-            System.out.println("5- Volver al menú primcipal");
+            System.out.println("5- Volver al menú principal");
             option = Kb.getOption(1, 5);
 
             switch (option){
                 case 1:
-                    createMenu();
+                    createDietMenu();
                     break;
                 case 2:
                     showDietDetails();
@@ -193,15 +209,35 @@ public class DietProgram {
     }
 
     private void deleteDiet() {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        System.out.println("Eliminar una dieta");
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        //TODO COMPROBAR QUE LA DIETA NO ESTÉ ASIGNADA A NINGÚN PACIENTE
-        String selected = selectDiet();
-        if(selected.equals(null)){
-            return;
-        }else{
-            dietList.remove(selected);
+        if(dietList.isEmpty()){
+            System.out.println("No hay ninguna dieta registrada en el sistema");
+        }else {
+            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            System.out.println("Eliminar una dieta");
+            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
+            String selected = selectDiet();
+            //*Si retorna null significa que el usuario desea volver
+            if(selected == null){
+                return;
+            }else{
+                Diet diet = dietList.get(selected);
+                Boolean finded = false;
+                Days[] day = Days.values();
+                for(int i=0; i<customerList.size(); i++){
+                    for(int j=0; j<Days.values().length; j++){
+                        if(diet.equals(customerList.get(i).getDietForDay(day[j]))){
+                            finded = true;
+                        }
+                    }
+                }
+                if(finded){
+                    System.out.println("La dieta no puede ser eliminada ya que se encuentra asignada a un paciente");
+                }else{
+                    dietList.remove(selected);
+                    System.out.println("Dieta eliminada con éxito");
+                }
+            }
         }
     }
 
@@ -378,7 +414,7 @@ public class DietProgram {
         }
     }
 
-    private void createMenu() {
+    private void createDietMenu() {
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         System.out.println("Crear Dieta");
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -393,7 +429,7 @@ public class DietProgram {
         String name = Kb.nextLine();
         switch (option){
             case 1:
-                dietList.put(name, new Diet());
+                dietList.put(name, new Diet(name));
                 System.out.println("Se ha creado una dieta sin límites");
                 break;
             case 2:
@@ -401,7 +437,7 @@ public class DietProgram {
                 System.out.println("Escriba número de calorias");
                 System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                 Integer calories = Kb.forceNextInt();
-                dietList.put(name, new Diet(calories));
+                dietList.put(name, new Diet(name, calories));
                 System.out.println("Se ha creado una dieta con "+calories+" calorías máximas");
                 break;
             case 3:
@@ -414,25 +450,36 @@ public class DietProgram {
                 Integer fats = Kb.forceNextInt();
                 System.out.println("Proteínas:");
                 Integer proteins = Kb.forceNextInt();
-                dietList.put(name, new Diet(carbs, fats, proteins));
+                dietList.put(name, new Diet(name, carbs, fats, proteins));
                 System.out.println("Se ha creado una dieta con Carbohidratos:"+carbs+", Grasas:"+fats+" ,Proteínas:"+proteins);
                 break;
             case 4:
-                //TODO CREAR PRIMERO CLASE COSTUMER Y LUEGO MODIFICAR ESTE MÉTODO
-                /*System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-                System.out.println("Escriba los datos personales del paciente");
                 System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-                System.out.println("Peso:");
-                Integer weight = Kb.forceNextInt();
-                System.out.println("Altura:");
-                Integer height = Kb.forceNextInt();
-                System.out.println("Edad:");
-                Integer age = Kb.forceNextInt();
-                System.out.println("Mujer u Hombre(m/h):");
-                String sexCharacter = Kb.nextLine();
-                this.diet = new Diet("m".equalsIgnoreCase(sexCharacter),age,height,weight);
-                System.out.println("Se ha creado una dieta de "+this.diet.getMaxCalories()+" calorías máximas");
-                break;*/
+                System.out.println("Dieta personalizada por paciente");
+                System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                //TODO HACER QUE LA DIETA SE INCLUYA AL PACIENTE SELECCIONADO EN UN DIA CONCRETO
+                if(customerList.isEmpty()){
+                    System.out.println("Por favor, debes introducir un paciente en primer lugar.");
+                }else{
+                    Integer position = selectCustomer();
+                    String gender = customerList.get(position).getGender();
+                    Integer age = customerList.get(position).getAge();
+                    Integer height = customerList.get(position).getHeight();
+                    Integer weight = customerList.get(position).getWeight();
+
+                    Diet diet = new Diet(name, "m".equalsIgnoreCase(gender), age, height, weight);
+                    dietList.put(name, diet);
+
+                    System.out.println("¿Para qué día de la semana deseas asignar la dieta?");
+                    Days day = Days.selectDay(Kb.nextLine());
+
+                    customerList.get(position).setCostumerDietsList(day, diet);
+
+                    System.out.println("Se ha creado una dieta con un límite de " + diet.getMaxCalories() +
+                            " calorías para " + customerList.get(position).getName() +" el día " + day.getName());
+
+                }
+                break;
         }
     }
     
@@ -443,7 +490,7 @@ public class DietProgram {
             System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             String selected = selectDiet();
             //*Comprobamos que el usuario no haya seleccionado la opción de salir
-            if(selected.equals(null)){
+            if(selected == null){
                 return;
             }else{
                 System.out.println("\nDieta seleccionada: "  + selected);

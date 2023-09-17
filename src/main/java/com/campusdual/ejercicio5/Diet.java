@@ -11,29 +11,34 @@ public class Diet {
     public static final String MAX_FATS_REBASE = "MAX_FATS_REBASE";
     public static final String MAX_PROTEINS_REBASE = "MAX_PROTEINS_REBASE";
 
+    private String name;
     private Integer maxCalories;
     private Integer maxCarbs;
     private Integer maxFats;
     private Integer maxProteins;
     private List<Intake> intakes;
 
-    public Diet(){
+    public Diet(String name){
+        this.name = name;
         this.intakes = new ArrayList<>();
     }
 
-    public Diet(Integer maxCalories){
+    public Diet(String name, Integer maxCalories){
+        this.name = name;
         this.maxCalories=maxCalories;
         this.intakes = new ArrayList<>();
     }
 
-    public Diet(Integer maxFats, Integer maxCarbs, Integer maxProteins){
+    public Diet(String name, Integer maxFats, Integer maxCarbs, Integer maxProteins){
+        this.name = name;
         this.maxCarbs=maxCarbs;
         this.maxFats=maxFats;
         this.maxProteins=maxProteins;
         this.intakes = new ArrayList<>();
     }
 
-    public Diet(Boolean women, Integer age, Integer height, Integer weight){
+    public Diet(String name, Boolean women, Integer age, Integer height, Integer weight){
+        this.name = name;
         if(women){
             maxCalories = (int) ((10*weight) + (6.25*height))-(5*age)-161;
         }else{
@@ -114,6 +119,14 @@ public class Diet {
             totalProtein = totalProtein + intake.calculatedProteins();
         }
         return totalProtein;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getFoodNumber(){

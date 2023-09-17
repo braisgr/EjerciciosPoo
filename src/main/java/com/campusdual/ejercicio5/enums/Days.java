@@ -33,4 +33,40 @@ public enum Days {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static Days selectDay(String day){
+
+        Days selectedDay = null;
+
+        while(selectedDay == null){
+            switch(day.toUpperCase()){
+
+                case "LUNES":
+                    selectedDay = Days.L;
+                    break;
+                case "MARTES":
+                    selectedDay = Days.M;
+                    break;
+                case "MIERCOLES":
+                    selectedDay = Days.X;
+                    break;
+                case "JUEVES":
+                    selectedDay = Days.J;
+                    break;
+                case "VIERNES":
+                    selectedDay = Days.V;
+                    break;
+                case "SABADO":
+                    selectedDay = Days.S;
+                    break;
+                case "DOMINGO":
+                    selectedDay = Days.D;
+                    break;
+                default:
+                    System.out.println("El día introducido no es válido. Por favor, introduce uno correcto");
+                    break;
+            }
+        }
+        return selectedDay;
+    }
 }

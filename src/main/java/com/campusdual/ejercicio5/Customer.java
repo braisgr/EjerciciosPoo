@@ -33,8 +33,9 @@ public class Customer {
         return costumerDietsList;
     }
 
-    public void setCostumerDietsList(Map<Days, Diet> costumerDietsList) {
-        this.costumerDietsList = costumerDietsList;
+    public void setCostumerDietsList(Days day, Diet diet) {
+
+        costumerDietsList.put(day, diet);
     }
 
     public String getName() {
@@ -105,4 +106,15 @@ public class Customer {
     public Diet getDietForDay(Days day) {
         return costumerDietsList.get(day);
     }
+
+    @Override
+    public String toString() {
+        return  "Nombre: " + name +
+                "\nApellido: " + surname +
+                "\nPeso: " + weight + " kg" +
+                "\nAltura: " + height + " cm" +
+                "\nEdad: " + age +
+                "\nGénero: " + gender;
+    }
+
 }
